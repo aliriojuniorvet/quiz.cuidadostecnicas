@@ -608,8 +608,24 @@ body {
       </ul>
     </div>
 
-    <button class="btn-secondary" onclick="voltarInicio()">↩ Fazer novo quiz</button>
     <p class="status-msg" id="status-msg">Enviando resultado...</p>
+  </div>
+
+  <!-- ═══ BLOQUEADO ═══ -->
+  <div id="screen-bloqueado" class="screen">
+    <div class="setup-card" style="text-align:center; margin-top:8px;">
+      <div style="font-size:52px; margin-bottom:16px;">🔒</div>
+      <h2 style="color:var(--blue-800); margin-bottom:12px;">Quiz já realizado</h2>
+      <p style="color:var(--gray-600); font-size:15px; line-height:1.6; margin-bottom:20px;">
+        Olá, <strong id="bloq-nome"></strong>!<br>
+        Você já concluiu este quiz e sua pontuação foi registrada.<br>
+        Cada aluno pode realizar apenas <strong>uma tentativa</strong>.
+      </p>
+      <div class="info-box" style="text-align:left;">
+        Sua pontuação registrada: <strong id="bloq-pts" style="color:var(--blue-700);font-size:18px;"></strong> pts<br>
+        Turma: <strong id="bloq-turma"></strong>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -814,6 +830,18 @@ function iniciarQuiz() {
   nomeAluno = document.getElementById('input-nome').value.trim();
   if (!nomeAluno) { alert('Por favor, digite seu nome.'); return; }
   if (!turmaAluno) { alert('Selecione a Turma A ou B.'); return; }
+
+  // ── Verificar se já realizou o quiz ──
+  const chave = `quiz_feito_${nomeAluno.toLowerCase().replace(/\s+/g,'_')}_T${turmaAluno}`;
+  const registro = localStorage.getItem(chave);
+  if (registro) {
+    const dados = JSON.parse(registro);
+    document.getElementById('bloq-nome').textContent = dados.nome;
+    document.getElementById('bloq-pts').textContent = dados.pontuacao;
+    document.getElementById('bloq-turma').textContent = `Turma ${dados.turma}`;
+    mostrarTela('screen-bloqueado');
+    return;
+  }
 
   // reset
   qAtual = 0; pontuacao = 0; acertos = 0; erros = 0;
@@ -1025,6 +1053,10 @@ async function finalizarQuiz() {
   // progress bar final
   document.getElementById('progress-fill').style.width = '100%';
 
+  // ── Gravar no localStorage para bloquear nova tentativa ──
+  const chave = `quiz_feito_${nomeAluno.toLowerCase().replace(/\s+/g,'_')}_T${turmaAluno}`;
+  localStorage.setItem(chave, JSON.stringify({ nome: nomeAluno, turma: turmaAluno, pontuacao }));
+
   // enviar para Google Sheets
   await enviarResultado();
 
@@ -1139,10 +1171,6 @@ function mostrarTela(id) {
   document.getElementById(id).classList.add('active');
 }
 
-function voltarInicio() {
-  clearInterval(timerInterval);
-  mostrarTela('screen-setup');
-}
 </script>
 </body>
 </html>
