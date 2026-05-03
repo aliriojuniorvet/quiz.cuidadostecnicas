@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Cuidados Peri-Operatórios</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blue-900: #0a1f44;
+  --blue-800: #0d2d6b;
+  --blue-700: #1a4a9f;
+  --blue-600: #2563eb;
+  --blue-500: #3b82f6;
+  --blue-400: #60a5fa;
+  --blue-300: #93c5fd;
+  --blue-200: #bfdbfe;
+  --blue-100: #dbeafe;
+  --blue-50:  #eff6ff;
+  --white:    #ffffff;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-400: #94a3b8;
+  --gray-600: #475569;
+  --success:  #16a34a;
+  --success-bg: #dcfce7;
+  --danger:   #dc2626;
+  --danger-bg:#fee2e2;
+  --gold:     #d97706;
+  --gold-bg:  #fef3c7;
+  --radius-sm: 8px;
+  --radius:   14px;
+  --radius-lg:20px;
+  --shadow:   0 4px 24px rgba(10,31,68,0.10);
+  --shadow-lg:0 8px 40px rgba(10,31,68,0.16);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--blue-50);
+  color: var(--blue-900);
+  min-height: 100vh;
+}
+
+/* ===== TOPO ===== */
+.page-header {
+  background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-700) 100%);
+  color: var(--white);
+  padding: 28px 24px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.page-header::before {
+  content:'';
+  position:absolute; inset:0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.page-header .badge {
+  display:inline-block;
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25);
+  border-radius:20px;
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  padding:5px 16px;
+  margin-bottom:12px;
+  font-family:'DM Mono',monospace;
+}
+.page-header h1 {
+  font-size:clamp(20px,4vw,30px);
+  font-weight:700;
+  line-height:1.25;
+  margin-bottom:6px;
+}
+.page-header p { font-size:14px; opacity:.7; }
+
+/* ===== CONTAINER ===== */
+.container {
+  max-width:680px;
+  margin:0 auto;
+  padding:24px 16px 60px;
+}
+
+/* ===== SCREENS ===== */
+.screen { display:none; }
+.screen.active { display:block; }
+
+/* ===== SETUP ===== */
+.setup-card {
+  background:var(--white);
+  border-radius:var(--radius-lg);
+  padding:32px 28px;
+  box-shadow:var(--shadow-lg);
+  margin-top:8px;
+}
+.setup-card h2 {
+  font-size:20px; font-weight:700;
+  color:var(--blue-800);
+  margin-bottom:24px;
+  display:flex; align-items:center; gap:10px;
+}
+.setup-card h2 span { font-size:22px; }
+
+.field { margin-bottom:20px; }
+.field label {
+  display:block;
+  font-size:11px; font-weight:700;
+  letter-spacing:2px; text-transform:uppercase;
+  color:var(--blue-600);
+  margin-bottom:8px;
+}
+.field input[type=text] {
+  width:100%;
+  border:2px solid var(--blue-200);
+  border-radius:var(--radius-sm);
+  padding:12px 16px;
+  font-family:'DM Sans',sans-serif;
+  font-size:16px;
+  color:var(--blue-900);
+  background:var(--white);
+  outline:none;
+  transition:border-color .2s;
+}
+.field input[type=text]:focus { border-color:var(--blue-500); }
+.field input[type=text]::placeholder { color:var(--gray-400); }
+
+.turma-group {
+  display:grid; grid-template-columns:1fr 1fr; gap:12px;
+}
+.turma-btn {
+  padding:16px 10px;
+  border:2px solid var(--blue-200);
+  border-radius:var(--radius-sm);
+  background:var(--white);
+  color:var(--blue-600);
+  font-family:'DM Sans',sans-serif;
+  font-size:20px; font-weight:700;
+  letter-spacing:2px;
+  cursor:pointer;
+  transition:all .2s;
+}
+.turma-btn:hover { border-color:var(--blue-500); background:var(--blue-50); }
+.turma-btn.selected {
+  border-color:var(--blue-600);
+  background:var(--blue-600);
+  color:var(--white);
+}
+
+.info-box {
+  background:var(--blue-50);
+  border:1px solid var(--blue-200);
+  border-radius:var(--radius-sm);
+  padding:14px 16px;
+  font-size:13px;
+  color:var(--blue-700);
+  line-height:1.6;
+  margin-bottom:20px;
+}
+.info-box strong { color:var(--blue-800); }
+
+.btn-start {
+  width:100%;
+  padding:16px;
+  background:linear-gradient(135deg, var(--blue-700), var(--blue-600));
+  border:none;
+  border-radius:var(--radius-sm);
+  color:var(--white);
+  font-family:'DM Sans',sans-serif;
+  font-size:17px; font-weight:700;
+  cursor:pointer;
+  letter-spacing:.5px;
+  transition:opacity .2s, transform .1s;
+  box-shadow:0 4px 16px rgba(37,99,235,0.35);
+}
+.btn-start:hover { opacity:.93; transform:translateY(-1px); }
+.btn-start:active { transform:translateY(0); }
+
+/* ===== TOPBAR ===== */
+.quiz-topbar {
+  background:var(--white);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:12px 20px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-bottom:16px;
+  text-align:center;
+}
+.tb-item {}
+.tb-label {
+  font-size:9px; letter-spacing:2px;
+  text-transform:uppercase; color:var(--gray-400);
+  font-family:'DM Mono',monospace;
+  display:block; margin-bottom:2px;
+}
+.tb-value {
+  font-family:'DM Mono',monospace;
+  font-size:20px; font-weight:500;
+  color:var(--blue-700);
+}
+#tb-score { color:var(--blue-600); font-weight:700; }
+#tb-streak { color:var(--gold); }
+
+/* ===== PROGRESS ===== */
+.progress-wrap {
+  background:var(--blue-100);
+  border-radius:6px; height:5px;
+  margin-bottom:18px; overflow:hidden;
+}
+.progress-fill {
+  height:100%;
+  background:linear-gradient(90deg,var(--blue-500),var(--blue-400));
+  border-radius:6px;
+  transition:width .4s ease;
+}
+
+/* ===== STREAK DOTS ===== */
+.streak-row {
+  display:flex; gap:5px; justify-content:center;
+  margin-bottom:16px;
+}
+.sdot {
+  width:11px; height:11px; border-radius:50%;
+  background:var(--blue-100);
+  transition:background .3s;
+}
+.sdot.c { background:var(--success); }
+.sdot.w { background:var(--danger); }
+
+/* ===== QUESTION CARD ===== */
+.q-card {
+  background:var(--white);
+  border-radius:var(--radius-lg);
+  padding:28px 24px 24px;
+  box-shadow:var(--shadow-lg);
+  margin-bottom:16px;
+  position:relative;
+}
+.q-meta {
+  display:flex; align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
+}
+.q-tag {
+  font-family:'DM Mono',monospace;
+  font-size:11px; letter-spacing:2px;
+  color:var(--blue-500);
+  text-transform:uppercase;
+}
+/* timer ring */
+.timer-wrap { position:relative; width:54px; height:54px; }
+.timer-wrap svg { transform:rotate(-90deg); }
+.t-bg { fill:none; stroke:var(--blue-100); stroke-width:4; }
+.t-arc { fill:none; stroke:var(--blue-500); stroke-width:4; stroke-linecap:round; transition:stroke-dashoffset .08s linear, stroke .4s; }
+.t-num {
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'DM Mono',monospace;
+  font-size:14px; font-weight:500;
+  color:var(--blue-700);
+}
+
+.q-text {
+  font-size:17px; font-weight:600;
+  line-height:1.55;
+  color:var(--blue-900);
+  margin-bottom:22px;
+}
+
+/* ===== OPTIONS ===== */
+.options-grid { display:grid; gap:10px; }
+.opt-btn {
+  display:flex; align-items:center; gap:14px;
+  padding:13px 16px;
+  background:var(--blue-50);
+  border:2px solid var(--blue-100);
+  border-radius:var(--radius-sm);
+  color:var(--blue-900);
+  font-family:'DM Sans',sans-serif;
+  font-size:15px; font-weight:500;
+  cursor:pointer; text-align:left;
+  width:100%;
+  transition:all .15s;
+}
+.opt-btn:hover:not(:disabled) {
+  border-color:var(--blue-400);
+  background:var(--blue-100);
+}
+.opt-ltr {
+  min-width:32px; height:32px;
+  border-radius:8px;
+  background:var(--white);
+  border:1.5px solid var(--blue-200);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'DM Mono',monospace;
+  font-size:13px; font-weight:700;
+  flex-shrink:0;
+  color:var(--blue-600);
+  transition:all .15s;
+}
+.opt-btn.selected-correct {
+  border-color:var(--success);
+  background:var(--success-bg);
+  color:var(--success);
+}
+.opt-btn.selected-correct .opt-ltr {
+  background:var(--success); border-color:var(--success); color:#fff;
+}
+.opt-btn.selected-wrong {
+  border-color:var(--danger);
+  background:var(--danger-bg);
+  color:var(--danger);
+}
+.opt-btn.selected-wrong .opt-ltr {
+  background:var(--danger); border-color:var(--danger); color:#fff;
+}
+.opt-btn.show-correct {
+  border-color:var(--success);
+  background:var(--success-bg);
+  color:var(--success);
+  opacity:.85;
+}
+.opt-btn.show-correct .opt-ltr {
+  background:var(--success); border-color:var(--success); color:#fff;
+}
+.opt-btn:disabled { cursor:default; }
+
+/* ===== FEEDBACK TOAST ===== */
+.toast {
+  position:fixed; bottom:28px; left:50%;
+  transform:translateX(-50%) translateY(90px);
+  padding:11px 26px;
+  border-radius:40px;
+  font-weight:700; font-size:15px;
+  background:var(--white);
+  box-shadow:0 4px 20px rgba(0,0,0,.15);
+  border:2px solid transparent;
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1);
+  z-index:999; pointer-events:none;
+  white-space:nowrap;
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+.toast.t-correct { border-color:var(--success); color:var(--success); }
+.toast.t-wrong   { border-color:var(--danger);  color:var(--danger);  }
+.toast.t-bonus   { border-color:var(--gold);    color:var(--gold);    }
+.toast.t-penalty { border-color:var(--danger);  color:var(--danger);  }
+
+/* ===== RESULT ===== */
+.result-hero {
+  background:linear-gradient(135deg,var(--blue-900),var(--blue-700));
+  border-radius:var(--radius-lg);
+  padding:32px 24px;
+  text-align:center;
+  color:var(--white);
+  margin-bottom:20px;
+  box-shadow:var(--shadow-lg);
+}
+.result-hero .emoji { font-size:48px; display:block; margin-bottom:12px; }
+.result-hero h2 { font-size:26px; font-weight:700; margin-bottom:6px; }
+.result-hero .big-score {
+  font-family:'DM Mono',monospace;
+  font-size:52px; font-weight:700;
+  color:var(--blue-300);
+  display:block; margin:10px 0 4px;
+}
+.result-hero p { font-size:14px; opacity:.7; }
+
+.result-stats {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:12px; margin-bottom:20px;
+}
+.stat-card {
+  background:var(--white);
+  border-radius:var(--radius);
+  padding:16px 12px;
+  text-align:center;
+  box-shadow:var(--shadow);
+}
+.stat-val {
+  font-family:'DM Mono',monospace;
+  font-size:26px; font-weight:700;
+  color:var(--blue-700);
+  display:block; margin-bottom:4px;
+}
+.stat-lbl { font-size:11px; color:var(--gray-400); text-transform:uppercase; letter-spacing:1px; }
+
+/* ===== RANKING ===== */
+.ranking-section {
+  background:var(--white);
+  border-radius:var(--radius-lg);
+  padding:24px;
+  box-shadow:var(--shadow-lg);
+  margin-bottom:20px;
+}
+.ranking-section h3 {
+  font-size:16px; font-weight:700;
+  color:var(--blue-800);
+  margin-bottom:16px;
+  display:flex; align-items:center; gap:8px;
+}
+
+.ranking-list { list-style:none; display:grid; gap:8px; }
+.rank-row {
+  display:flex; align-items:center; gap:12px;
+  padding:12px 14px;
+  border-radius:var(--radius-sm);
+  border:1.5px solid var(--blue-100);
+  background:var(--blue-50);
+  transition:background .2s;
+}
+.rank-row.rank-1 { border-color:#fcd34d; background:#fffbeb; }
+.rank-row.rank-2 { border-color:#d1d5db; background:#f9fafb; }
+.rank-row.rank-3 { border-color:#fca97b; background:#fff7ed; }
+.rank-row.is-me  { border-color:var(--blue-400); background:var(--blue-50); }
+.rank-pos {
+  font-family:'DM Mono',monospace;
+  font-size:14px; font-weight:700;
+  width:28px; text-align:center;
+  color:var(--gray-400);
+}
+.rank-star { font-size:18px; }
+.rank-name { flex:1; font-weight:600; font-size:15px; }
+.rank-turma {
+  font-size:11px; font-family:'DM Mono',monospace;
+  background:var(--blue-100); color:var(--blue-600);
+  padding:3px 8px; border-radius:20px; font-weight:700;
+}
+.rank-pts {
+  font-family:'DM Mono',monospace;
+  font-size:16px; font-weight:700;
+  color:var(--blue-700);
+}
+
+.btn-secondary {
+  width:100%;
+  padding:14px;
+  background:var(--white);
+  border:2px solid var(--blue-200);
+  border-radius:var(--radius-sm);
+  color:var(--blue-700);
+  font-family:'DM Sans',sans-serif;
+  font-size:15px; font-weight:700;
+  cursor:pointer; margin-top:10px;
+  transition:all .2s;
+}
+.btn-secondary:hover { border-color:var(--blue-500); background:var(--blue-50); }
+
+.status-msg {
+  text-align:center; font-size:13px;
+  color:var(--gray-400); margin-top:12px;
+  font-style:italic;
+}
+.status-msg.ok { color:var(--success); font-style:normal; font-weight:600; }
+.status-msg.err { color:var(--danger); font-style:normal; }
+
+/* ===== LOADING OVERLAY ===== */
+.loading-overlay {
+  position:fixed; inset:0;
+  background:rgba(10,31,68,.5);
+  backdrop-filter:blur(4px);
+  display:flex; align-items:center; justify-content:center;
+  z-index:9999;
+}
+.loading-box {
+  background:var(--white);
+  border-radius:var(--radius-lg);
+  padding:32px 40px;
+  text-align:center;
+  box-shadow:var(--shadow-lg);
+}
+.spinner {
+  width:40px; height:40px;
+  border:4px solid var(--blue-100);
+  border-top-color:var(--blue-600);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+  margin:0 auto 16px;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+.loading-box p { font-weight:600; color:var(--blue-800); }
+
+/* ===== MISC ===== */
+.hidden { display:none !important; }
+
+@media(max-width:480px){
+  .quiz-topbar { grid-template-columns:repeat(2,1fr); }
+  .result-stats { grid-template-columns:repeat(2,1fr); }
+  .result-stats .stat-card:last-child { grid-column:span 2; }
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="badge">Medicina Veterinária</div>
+  <h1>Cuidados Pré, Trans e<br>Pós-Operatório</h1>
+  <p>Quiz interativo · Prof. Mv. Esp. José Alírio S. O. Júnior</p>
+</div>
+
+<div class="container">
+
+  <!-- ═══ SETUP ═══ -->
+  <div id="screen-setup" class="screen active">
+    <div class="setup-card">
+      <h2><span>📋</span> Identificação do Aluno</h2>
+
+      <div class="field">
+        <label>Nome completo</label>
+        <input type="text" id="input-nome" placeholder="Digite seu nome..." maxlength="60" autocomplete="off">
+      </div>
+
+      <div class="field">
+        <label>Turma</label>
+        <div class="turma-group">
+          <button class="turma-btn" data-turma="A" onclick="selecionarTurma(this)">TURMA A</button>
+          <button class="turma-btn" data-turma="B" onclick="selecionarTurma(this)">TURMA B</button>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <strong>Como funciona a pontuação:</strong><br>
+        Cada questão vale até <strong>100 pts</strong> — quanto mais rápido você responder, mais pontos ganha. 
+        Acertando <strong>5 seguidas</strong> você entra em modo 🔥 bônus (+25%). 
+        Errando <strong>3 seguidas</strong> aplica-se uma penalidade (−15%).
+      </div>
+
+      <button class="btn-start" onclick="iniciarQuiz()">COMEÇAR QUIZ →</button>
+    </div>
+  </div>
+
+  <!-- ═══ QUIZ ═══ -->
+  <div id="screen-quiz" class="screen">
+    <div class="quiz-topbar">
+      <div class="tb-item">
+        <span class="tb-label">Questão</span>
+        <span class="tb-value" id="tb-q">1/30</span>
+      </div>
+      <div class="tb-item">
+        <span class="tb-label">Pontuação</span>
+        <span class="tb-value" id="tb-score">0</span>
+      </div>
+      <div class="tb-item">
+        <span class="tb-label">Acertos</span>
+        <span class="tb-value" id="tb-acertos">0/0</span>
+      </div>
+      <div class="tb-item">
+        <span class="tb-label">Sequência</span>
+        <span class="tb-value" id="tb-streak">–</span>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+
+    <div class="streak-row" id="streak-row"></div>
+
+    <div class="q-card" id="q-card">
+      <div class="q-meta">
+        <span class="q-tag" id="q-tag">QUESTÃO 01</span>
+        <div class="timer-wrap">
+          <svg width="54" height="54" viewBox="0 0 54 54">
+            <circle class="t-bg" cx="27" cy="27" r="23"/>
+            <circle class="t-arc" id="timer-arc" cx="27" cy="27" r="23"
+              stroke-dasharray="144.5" stroke-dashoffset="0"/>
+          </svg>
+          <div class="t-num" id="timer-num">20</div>
+        </div>
+      </div>
+      <p class="q-text" id="q-text"></p>
+      <div class="options-grid" id="options-grid"></div>
+    </div>
+  </div>
+
+  <!-- ═══ RESULTADO ═══ -->
+  <div id="screen-result" class="screen">
+    <div class="result-hero">
+      <span class="emoji" id="result-emoji">🎉</span>
+      <h2 id="result-nome">Parabéns!</h2>
+      <span class="big-score" id="result-score">0</span>
+      <p id="result-subtitle">pontos · Quiz finalizado</p>
+    </div>
+
+    <div class="result-stats">
+      <div class="stat-card">
+        <span class="stat-val" id="stat-acertos">0</span>
+        <span class="stat-lbl">Acertos</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-val" id="stat-erros">0</span>
+        <span class="stat-lbl">Erros</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-val" id="stat-pct">0%</span>
+        <span class="stat-lbl">Aproveitamento</span>
+      </div>
+    </div>
+
+    <div class="ranking-section">
+      <h3>🏆 Ranking da Turma</h3>
+      <ul class="ranking-list" id="ranking-list">
+        <li style="color:var(--gray-400);font-size:14px;text-align:center;padding:12px">Carregando...</li>
+      </ul>
+    </div>
+
+    <button class="btn-secondary" onclick="voltarInicio()">↩ Fazer novo quiz</button>
+    <p class="status-msg" id="status-msg">Enviando resultado...</p>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Loading -->
+<div class="loading-overlay hidden" id="loading-overlay">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <p>Salvando resultado...</p>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// ⚠️  CONFIGURE AQUI A URL DO GOOGLE APPS SCRIPT
+// ═══════════════════════════════════════════════
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxc-wqvUyTH0BnjyBZCwoEclLI5SOGfv5yRaZIl57dxjm5si4Op-23XeHtD-957Qo7CcA/exec';
+
+// ══════════════════════════════
+//  BANCO DE QUESTÕES (30 itens)
+// ══════════════════════════════
+const perguntas = [
+  { // 1 — gabarito A
+    q: "Qual a principal finalidade dos cuidados pré-operatórios?",
+    opts: ["Minimizar riscos e complicações pós-operatórias","Acelerar o tempo cirúrgico","Reduzir o custo do procedimento","Dispensar exames complementares"],
+    c: 0
+  },
+  { // 2 — gabarito B
+    q: "O antibiótico profilático deve ser administrado quando antes da cirurgia?",
+    opts: ["2 horas antes","30 minutos antes","No momento da incisão","1 hora antes"],
+    c: 1
+  },
+  { // 3 — gabarito C
+    q: "Qual hematócrito mínimo indica cautela para realização de cirurgia eletiva?",
+    opts: ["< 40%","< 35%","< 25%","< 15%"],
+    c: 2
+  },
+  { // 4 — gabarito D
+    q: "A classificação ASA 3 corresponde a qual estado do paciente?",
+    opts: ["Indivíduo saudável","Doença sistêmica leve","Doença incapacitante com risco de vida","Doença sistêmica limitante sem risco de vida"],
+    c: 3
+  },
+  { // 5 — gabarito A
+    q: "Qual veia é considerada o principal acesso venoso no transoperatório de pequenos animais?",
+    opts: ["Cefálica","Safena medial","Jugular","Radial"],
+    c: 0
+  },
+  { // 6 — gabarito B
+    q: "Qual fluido é indicado para correção de acidose metabólica no período perioperatório?",
+    opts: ["Ringer-lactato","Bicarbonato de sódio","Solução fisiológica 0,9%","Dextrano"],
+    c: 1
+  },
+  { // 7 — gabarito C
+    q: "A deiscência de sutura e evisceração são complicações de qual período pós-operatório?",
+    opts: ["Imediato","Tardio","Mediato","Pré-operatório"],
+    c: 2
+  },
+  { // 8 — gabarito D
+    q: "Qual parâmetro abaixo NÃO faz parte da monitoração padrão no transoperatório?",
+    opts: ["Capnografia","Oximetria","Pressão arterial","Glicemia"],
+    c: 3
+  },
+  { // 9 — gabarito A
+    q: "Em filhotes, em relação ao jejum alimentar pré-operatório, o correto é:",
+    opts: ["Não suspender a alimentação","Jejum de 12 horas","Jejum de 6 horas","Jejum de 24 horas"],
+    c: 0
+  },
+  { // 10 — gabarito B
+    q: "Qual a principal causa de mortalidade em cirurgias não-cardíacas?",
+    opts: ["Infecção do sítio cirúrgico","Complicações cardíacas","Complicações renais","Deiscência de sutura"],
+    c: 1
+  },
+  { // 11 — gabarito C
+    q: "A remoção de pontos cutâneos deve ocorrer em qual prazo padrão?",
+    opts: ["3–5 dias","5–7 dias","7–15 dias","20–30 dias"],
+    c: 2
+  },
+  { // 12 — gabarito D
+    q: "Qual complicação está associada ao risco aumentado em pacientes obesos no pós-operatório?",
+    opts: ["Seroma","Infecção urinária","Hernia incisional","Tromboembolismo"],
+    c: 3
+  },
+  { // 13 — gabarito A
+    q: "O tempo de protrombina abaixo de qual valor indica cautela para a cirurgia?",
+    opts: ["80%","70%","60%","50%"],
+    c: 0
+  },
+  { // 14 — gabarito B
+    q: "Febre surgida 48 horas após a cirurgia sugere, principalmente:",
+    opts: ["Reação inflamatória normal","Pneumonia","Infecção de ferida cirúrgica","Infecção urinária"],
+    c: 1
+  },
+  { // 15 — gabarito C
+    q: "A sonda vesical deve ser retirada em até quanto tempo no pós-operatório padrão?",
+    opts: ["6 horas","12 horas","24 horas","48 horas"],
+    c: 2
+  },
+  { // 16 — gabarito D
+    q: "Qual agente anestésico deprime o SNC e a função respiratória?",
+    opts: ["Ketamina","Acepromazina","Morfina","Barbitúrico e propofol"],
+    c: 3
+  },
+  { // 17 — gabarito A
+    q: "Em qual classificação ASA o paciente apresenta mau prognóstico?",
+    opts: ["ASA 5","ASA 4","ASA 3","ASA 2"],
+    c: 0
+  },
+  { // 18 — gabarito B
+    q: "O dreno cirúrgico aumenta de forma significativa qual risco?",
+    opts: ["Deiscência de sutura","Infecção","Hemorragia","Obstrução intestinal"],
+    c: 1
+  },
+  { // 19 — gabarito C
+    q: "A transfusão de plasma está indicada quando a proteína plasmática está abaixo de:",
+    opts: ["60 g/L","55 g/L","45 g/L","35 g/L"],
+    c: 2
+  },
+  { // 20 — gabarito D
+    q: "A tricotomia do campo cirúrgico deve ser realizada:",
+    opts: ["48 horas antes","24 horas antes","1 semana antes","No dia do procedimento"],
+    c: 3
+  },
+  { // 21 — gabarito A
+    q: "Pacientes imunodeprimidos apresentam risco aumentado de:",
+    opts: ["Infecções oportunistas","Hipercoagulação","Hipertermia","Obstrução urinária"],
+    c: 0
+  },
+  { // 22 — gabarito B
+    q: "Qual é a concentração de água corporal em neonatos?",
+    opts: ["60%","80%","70%","90%"],
+    c: 1
+  },
+  { // 23 — gabarito C
+    q: "Qual exame é essencial para avaliar a função hepática no pré-operatório?",
+    opts: ["Hemograma completo","Coagulograma","TGP e fosfatase alcalina","Urinálise"],
+    c: 2
+  },
+  { // 24 — gabarito D
+    q: "O pós-operatório tardio é caracterizado por:",
+    opts: ["Primeiras horas no bloco cirúrgico","Retorno ao tutor em 7 dias","Período até a primeira revisão","Intercorrências que comprometem a recuperação por meses a anos"],
+    c: 3
+  },
+  { // 25 — gabarito A
+    q: "A hipotermia pós-operatória é combatida com:",
+    opts: ["Colchão térmico e luvas aquecidas","Anti-inflamatório tópico","Fluidoterapia hipertônica","Antibioticoterapia"],
+    c: 0
+  },
+  { // 26 — gabarito B
+    q: "Hepatopatias agudas contraindicam cirurgia eletiva principalmente porque:",
+    opts: ["Causam hipotermia","Comprometem a detoxicação de anestésicos","Aumentam o sangramento","Reduzem a imunidade"],
+    c: 1
+  },
+  { // 27 — gabarito C
+    q: "Para cirurgia intestinal, o preparo do intestino deve começar quantos dias antes?",
+    opts: ["No dia anterior","1 dia antes","2–3 dias antes","1 semana antes"],
+    c: 2
+  },
+  { // 28 — gabarito D
+    q: "Qual é o risco de mortalidade para pacientes com insuficiência renal aguda submetidos à cirurgia?",
+    opts: ["> 20%","> 30%","> 40%","> 50%"],
+    c: 3
+  },
+  { // 29 — gabarito A
+    q: "A laparotomia exploratória é classificada com qual nível de dor esperada?",
+    opts: ["Severa","Moderada","Discreta","Intensa"],
+    c: 0
+  },
+  { // 30 — gabarito B
+    q: "Qual medida NÃO é considerada um cuidado pós-operatório imediato?",
+    opts: ["Continuar fluidoterapia","Retirar o acesso venoso imediatamente","Deambulação precoce","Analgesia pós-operatória"],
+    c: 1
+  }
+];
+
+// ═════════════════════
+//  ESTADO DO QUIZ
+// ═════════════════════
+let nomeAluno = '', turmaAluno = '';
+let qAtual = 0, pontuacao = 0;
+let acertos = 0, erros = 0;
+let sequenciaCorreta = 0, sequenciaErrada = 0;
+let modoBonus = false;
+let modoPenalidade = false;
+let timerInterval = null;
+let tempoRestante = 20;
+let respondido = false;
+let historicoStreak = []; // 'c' ou 'w'
+
+// ═════════════════════
+//  SETUP
+// ═════════════════════
+function selecionarTurma(btn) {
+  document.querySelectorAll('.turma-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  turmaAluno = btn.dataset.turma;
+}
+
+function iniciarQuiz() {
+  nomeAluno = document.getElementById('input-nome').value.trim();
+  if (!nomeAluno) { alert('Por favor, digite seu nome.'); return; }
+  if (!turmaAluno) { alert('Selecione a Turma A ou B.'); return; }
+
+  // reset
+  qAtual = 0; pontuacao = 0; acertos = 0; erros = 0;
+  sequenciaCorreta = 0; sequenciaErrada = 0;
+  modoBonus = false; modoPenalidade = false;
+  historicoStreak = [];
+
+  mostrarTela('screen-quiz');
+  renderizarStreakDots();
+  carregarQuestao();
+}
+
+// ═════════════════════
+//  QUESTÃO
+// ═════════════════════
+function carregarQuestao() {
+  respondido = false;
+  const p = perguntas[qAtual];
+
+  document.getElementById('q-tag').textContent = `QUESTÃO ${String(qAtual+1).padStart(2,'0')}`;
+  document.getElementById('q-text').textContent = p.q;
+  document.getElementById('tb-q').textContent = `${qAtual+1}/30`;
+  document.getElementById('progress-fill').style.width = `${((qAtual)/30)*100}%`;
+
+  const grid = document.getElementById('options-grid');
+  grid.innerHTML = '';
+  const letras = ['A','B','C','D'];
+  p.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = `<span class="opt-ltr">${letras[i]}</span>${opt}`;
+    btn.onclick = () => responder(i);
+    grid.appendChild(btn);
+  });
+
+  iniciarTimer();
+}
+
+// ═════════════════════
+//  TIMER
+// ═════════════════════
+function iniciarTimer() {
+  clearInterval(timerInterval);
+  tempoRestante = 20;
+  atualizarTimer();
+
+  timerInterval = setInterval(() => {
+    tempoRestante--;
+    atualizarTimer();
+    if (tempoRestante <= 0) {
+      clearInterval(timerInterval);
+      if (!respondido) tempoEsgotado();
+    }
+  }, 1000);
+}
+
+function atualizarTimer() {
+  const arc = document.getElementById('timer-arc');
+  const num = document.getElementById('timer-num');
+  const circ = 144.5;
+  const pct = tempoRestante / 20;
+  arc.style.strokeDashoffset = circ * (1 - pct);
+
+  // cor
+  if (pct > 0.5) arc.style.stroke = '#2563eb';
+  else if (pct > 0.25) arc.style.stroke = '#d97706';
+  else arc.style.stroke = '#dc2626';
+
+  num.textContent = tempoRestante;
+}
+
+function tempoEsgotado() {
+  respondido = true;
+  const p = perguntas[qAtual];
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach(b => b.disabled = true);
+  btns[p.c].classList.add('show-correct');
+
+  registrarResultado(false);
+  mostrarToast('⏱ Tempo esgotado!', 'wrong');
+  setTimeout(proximaQuestao, 1800);
+}
+
+// ═════════════════════
+//  RESPOSTA
+// ═════════════════════
+function responder(idx) {
+  if (respondido) return;
+  respondido = true;
+  clearInterval(timerInterval);
+
+  const p = perguntas[qAtual];
+  const correto = (idx === p.c);
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach(b => b.disabled = true);
+
+  if (correto) {
+    btns[idx].classList.add('selected-correct');
+    // pontuação pelo tempo
+    let pts = Math.round(50 + (tempoRestante / 20) * 50);
+    if (modoBonus) pts = Math.round(pts * 1.25);
+    pontuacao += pts;
+    acertos++;
+    registrarResultado(true);
+    mostrarToast(`✓ Correto! +${pts} pts${modoBonus?' 🔥':''}`, 'correct');
+  } else {
+    btns[idx].classList.add('selected-wrong');
+    btns[p.c].classList.add('show-correct');
+    erros++;
+    registrarResultado(false);
+    mostrarToast('✗ Incorreto!', 'wrong');
+  }
+
+  setTimeout(proximaQuestao, 1700);
+}
+
+function registrarResultado(correto) {
+  if (correto) {
+    sequenciaCorreta++;
+    sequenciaErrada = 0;
+    historicoStreak.push('c');
+    // bônus a cada 5 seguidas
+    if (sequenciaCorreta > 0 && sequenciaCorreta % 5 === 0) {
+      modoBonus = true;
+      setTimeout(() => mostrarToast('🔥 BÔNUS ATIVADO! +25% por 5 acertos seguidos!','bonus'), 500);
+    }
+    modoPenalidade = false;
+  } else {
+    sequenciaErrada++;
+    sequenciaCorreta = 0;
+    modoBonus = false;
+    historicoStreak.push('w');
+    // penalidade a cada 3 erros seguidos
+    if (sequenciaErrada % 3 === 0) {
+      const pen = Math.round(pontuacao * 0.15);
+      pontuacao = Math.max(0, pontuacao - pen);
+      setTimeout(() => mostrarToast(`⚠ Penalidade! −${pen} pts (3 erros seguidos)`,'penalty'), 500);
+    }
+  }
+
+  // atualizar topbar
+  document.getElementById('tb-score').textContent = pontuacao;
+  document.getElementById('tb-acertos').textContent = `${acertos}/${qAtual+1}`;
+  document.getElementById('tb-streak').textContent =
+    sequenciaCorreta > 1 ? `🔥${sequenciaCorreta}` : sequenciaErrada > 1 ? `❌${sequenciaErrada}` : '–';
+
+  atualizarStreakDots();
+}
+
+// ═════════════════════
+//  STREAK DOTS
+// ═════════════════════
+function renderizarStreakDots() {
+  const row = document.getElementById('streak-row');
+  row.innerHTML = '';
+  for (let i = 0; i < 10; i++) {
+    const d = document.createElement('div');
+    d.className = 'sdot';
+    d.id = `sdot-${i}`;
+    row.appendChild(d);
+  }
+}
+
+function atualizarStreakDots() {
+  const ultimos = historicoStreak.slice(-10);
+  for (let i = 0; i < 10; i++) {
+    const d = document.getElementById(`sdot-${i}`);
+    if (!d) continue;
+    d.className = 'sdot';
+    const v = ultimos[i];
+    if (v === 'c') d.classList.add('c');
+    else if (v === 'w') d.classList.add('w');
+  }
+}
+
+// ═════════════════════
+//  PRÓXIMA QUESTÃO
+// ═════════════════════
+function proximaQuestao() {
+  qAtual++;
+  if (qAtual >= perguntas.length) {
+    finalizarQuiz();
+  } else {
+    carregarQuestao();
+  }
+}
+
+// ═════════════════════
+//  FINALIZAR
+// ═════════════════════
+async function finalizarQuiz() {
+  mostrarTela('screen-result');
+
+  document.getElementById('result-nome').textContent = `${nomeAluno}`;
+  document.getElementById('result-score').textContent = pontuacao;
+  const pct = Math.round((acertos / 30) * 100);
+  document.getElementById('result-subtitle').textContent = `${pct}% de aproveitamento · Turma ${turmaAluno}`;
+  document.getElementById('stat-acertos').textContent = acertos;
+  document.getElementById('stat-erros').textContent = erros;
+  document.getElementById('stat-pct').textContent = `${pct}%`;
+
+  // emoji baseado no aproveitamento
+  let emoji = '😅';
+  if (pct >= 90) emoji = '🏆';
+  else if (pct >= 75) emoji = '🎉';
+  else if (pct >= 50) emoji = '👍';
+  document.getElementById('result-emoji').textContent = emoji;
+
+  // progress bar final
+  document.getElementById('progress-fill').style.width = '100%';
+
+  // enviar para Google Sheets
+  await enviarResultado();
+
+  // carregar ranking
+  await carregarRanking();
+}
+
+// ═════════════════════
+//  GOOGLE SHEETS
+// ═════════════════════
+async function enviarResultado() {
+  const statusEl = document.getElementById('status-msg');
+  if (GOOGLE_SCRIPT_URL === 'COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT') {
+    statusEl.textContent = '⚠ URL do Google Script não configurada.';
+    statusEl.className = 'status-msg err';
+    return;
+  }
+
+  document.getElementById('loading-overlay').classList.remove('hidden');
+  const agora = new Date();
+  const data = `${agora.getDate().toString().padStart(2,'0')}/${(agora.getMonth()+1).toString().padStart(2,'0')}/${agora.getFullYear()}`;
+  const hora = `${agora.getHours().toString().padStart(2,'0')}:${agora.getMinutes().toString().padStart(2,'0')}`;
+
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        acao: 'registrar',
+        nome: nomeAluno,
+        turma: turmaAluno,
+        pontuacao: pontuacao,
+        acertos: acertos,
+        erros: erros,
+        data: data,
+        hora: hora
+      })
+    });
+    statusEl.textContent = '✓ Resultado salvo com sucesso!';
+    statusEl.className = 'status-msg ok';
+  } catch(e) {
+    statusEl.textContent = '✗ Erro ao salvar. Tente novamente.';
+    statusEl.className = 'status-msg err';
+  } finally {
+    document.getElementById('loading-overlay').classList.add('hidden');
+  }
+}
+
+async function carregarRanking() {
+  const lista = document.getElementById('ranking-list');
+  if (GOOGLE_SCRIPT_URL === 'COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT') {
+    lista.innerHTML = '<li style="color:var(--gray-400);font-size:13px;text-align:center;padding:12px">Configure o Google Script para ver o ranking.</li>';
+    return;
+  }
+
+  try {
+    const res = await fetch(`${GOOGLE_SCRIPT_URL}?acao=ranking`);
+    const dados = await res.json();
+    renderizarRanking(dados);
+  } catch(e) {
+    // fallback: mostra só o aluno atual
+    renderizarRanking([{ nome: nomeAluno, turma: turmaAluno, pontuacao: pontuacao }]);
+  }
+}
+
+function renderizarRanking(dados) {
+  const lista = document.getElementById('ranking-list');
+  lista.innerHTML = '';
+
+  // ordenar por pontuação
+  dados.sort((a, b) => b.pontuacao - a.pontuacao);
+
+  const estrelas = ['🥇', '🥈', '🥉'];
+
+  dados.slice(0, 20).forEach((aluno, i) => {
+    const isMe = aluno.nome === nomeAluno && aluno.turma === turmaAluno;
+    const li = document.createElement('li');
+    li.className = `rank-row${i < 3 ? ` rank-${i+1}` : ''}${isMe ? ' is-me' : ''}`;
+    li.innerHTML = `
+      <span class="rank-pos">${i+1}</span>
+      ${i < 3 ? `<span class="rank-star">${estrelas[i]}</span>` : '<span style="width:18px"></span>'}
+      <span class="rank-name">${aluno.nome}${isMe ? ' <em style="font-size:11px;color:var(--blue-400)">(você)</em>' : ''}</span>
+      <span class="rank-turma">T${aluno.turma}</span>
+      <span class="rank-pts">${aluno.pontuacao}</span>
+    `;
+    lista.appendChild(li);
+  });
+
+  if (dados.length === 0) {
+    lista.innerHTML = '<li style="color:var(--gray-400);font-size:13px;text-align:center;padding:12px">Nenhum dado disponível.</li>';
+  }
+}
+
+// ═════════════════════
+//  TOAST
+// ═════════════════════
+let toastTimer = null;
+function mostrarToast(msg, tipo) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast t-${tipo} show`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ═════════════════════
+//  NAVEGAÇÃO
+// ═════════════════════
+function mostrarTela(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function voltarInicio() {
+  clearInterval(timerInterval);
+  mostrarTela('screen-setup');
+}
+</script>
+</body>
+</html>
